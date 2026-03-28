@@ -10,6 +10,9 @@ import static com.codeborne.selenide.Selenide.page;
 @Feature("Профиль пользователя")
 public class ProfilePage {
 
+    @FindBy(xpath = "//h1[contains(@class, 'h1') and contains(text(), 'Мой профиль')]")
+    private SelenideElement profileTitle;
+
     @FindBy(xpath = "//div[@class='grid_threeColumns__ldn5D']//div[@class='about']//h2[@class='h2']")
     private SelenideElement titleAd;
 
@@ -38,4 +41,8 @@ public class ProfilePage {
         buttonUpdateAd.click();
     }
 
+    @Step("Проверяем заголовок профиля")
+    public void getProfileTitle(String expectedTitle) {
+         profileTitle.shouldBe(visible).shouldHave(text(expectedTitle));
+    }
 }

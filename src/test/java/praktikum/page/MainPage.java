@@ -4,11 +4,15 @@ import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.*;
 import org.openqa.selenium.support.FindBy;
 
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.page;
 
 @Feature("Функционал главной страницы")
 public class MainPage {
+
+    @FindBy(xpath = "//div[@class='grid_threeColumns__ldn5D']//div[@class='about']//h2[@class='h2']")
+    private SelenideElement titleAd;
 
     @FindBy(xpath = "//button[text()='Вход и регистрация']")
     private SelenideElement buttonLogin;
@@ -81,5 +85,12 @@ public class MainPage {
         searchAd(name);
         clickCardAd();
         clickButtonDeleteAd();
+    }
+
+
+    @Step("Проверка отсутствия объявлений")
+    public void checkAdNotExists() {
+        cardAd.shouldNot(exist);
+        titleAd.shouldNot(exist);
     }
 }

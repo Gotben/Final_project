@@ -16,7 +16,7 @@ import static java.time.Duration.ofSeconds;
 @Feature("Создание объявления")
 public class AdPage {
 
-    @FindBy(xpath = "//h1[@class='hi createListing_title__IFtFs']") // лучше юзать contains, т е не завязываться на определённые
+    @FindBy(xpath = "//h1[@class='hi createListing_title__IFtFs']")
     private SelenideElement title;
 
     @FindBy(xpath = "(//input[@class='upload_hiddenInput__sCsY-'])[1]")
@@ -45,8 +45,6 @@ public class AdPage {
 
     @FindBy(xpath = "//button[normalize-space(text())='Опубликовать']")
     private SelenideElement buttonPublish;
-
-    // не завязываться на индексы (рекомндация), привязаться на что-то более уникальное типа text, id
 
     private ElementsCollection dropdownCategoryOptions = $$("div[class*='dropDownMenu_options'] button[class*='dropDownMenu_btn']");
     private ElementsCollection dropdownCityOptions = $$("div[class*='dropDownMenu_options'] button[class*='dropDownMenu_btn']");
@@ -117,3 +115,4 @@ public class AdPage {
         clickButtonPublish();
     }
 }
+

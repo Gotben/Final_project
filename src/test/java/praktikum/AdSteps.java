@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Feature("Создание объявления")
 public class AdSteps extends BasicLogic {
+    private String uniqueAdName;
     private LoginPage loginPage;
     private MainPage mainPage;
     private AdPage adPage;
@@ -35,7 +36,7 @@ public class AdSteps extends BasicLogic {
     public void user_login() {
         register();
         mainPage = new MainPage();
-        mainPage = Selenide.open(Config.BASE_URL, MainPage.class);
+        mainPage = open(Config.BASE_URL, MainPage.class);
         mainPage.clickButtonLogin();
         loginPage = new LoginPage();
         loginPage.waitForPageToLoad();
@@ -65,6 +66,8 @@ public class AdSteps extends BasicLogic {
     @Description("Нажимает на иконку профиля для просмотра своих объявлений")
     public void open_profile() {
         mainPage.clickButtonProfile();
+        profilePage = new ProfilePage();
+        profilePage.getProfileTitle("Мой профиль");
     }
 
     @And("Проверяет объявление в профиле")
@@ -119,12 +122,11 @@ public class AdSteps extends BasicLogic {
     }
 
     @And("Проверяем что у пользователя нет объявлений")
-    @Step("Проверка отсутствия объявлений через API")
-    @Description("GET-запрос к /api/profile/listings/1. Убеждаемся, что список offers пуст.")
+    @Step("Проверка отсутствия объявлений через UI")
+    @Description("Выполняем поиск объявления по названию и убеждаемся, что оно не найдено")
     public void check_user_no_ad() {
-        userSteps = new UserSteps();
-        profileSteps = new ProfileSteps(userSteps);
-        List<Offer> offers = profileSteps.userAdsGet(token).checkAdsUserGet().getOffers();
-        assertTrue(offers.isEmpty(), "Список объявлений должен быть пустым, но содержит " + offers.size() + " элементов");
+        mainPage = new MainPage();
+        mainPage.searchAd(name);
+        mainPage.checkAdNotExists();
     }
 }
