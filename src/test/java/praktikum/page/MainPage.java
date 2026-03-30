@@ -2,16 +2,17 @@ package praktikum.page;
 
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.*;
 
 @Feature("Функционал главной страницы")
 public class MainPage {
 
-    @FindBy(xpath = "//div[@class='grid_threeColumns__ldn5D']//div[@class='about']//h2[@class='h2']")
+    @FindBy(xpath = "//div[@class='about']//h2[@class='h2']")
     private SelenideElement titleAd;
 
     @FindBy(xpath = "//button[text()='Вход и регистрация']")
@@ -62,6 +63,7 @@ public class MainPage {
     @Step("Кликаем по иконке профиля")
     public void clickButtonProfile() {
         buttonProfile.click();
+
     }
 
     @Step("Вводим запрос в поле поиска и нажимаем Enter")
@@ -70,9 +72,15 @@ public class MainPage {
         inputSearch.pressEnter();
     }
 
-    @Step("Кликаем по карточке объявления")
-    public void clickCardAd() {
-        cardAd.click();
+    @Step("Поиск объявления по названию")
+    public String getCardAdXpath(String name) {
+        return "//div[@class='card']//h2[contains(text(), '" + name + "')]/ancestor::div[@class='card']";
+    }
+
+    @Step("Нажимаем на объявление")
+    public void clickCardAd(String name) {
+        SelenideElement card = $(By.xpath(getCardAdXpath(name)));
+        card.shouldBe(visible).click();
     }
 
     @Step("Нажимаем кнопку 'Удалить' на странице объявления")
@@ -83,7 +91,7 @@ public class MainPage {
     @Step("Удаляем объявление")
     public void deleteAd(String name) {
         searchAd(name);
-        clickCardAd();
+        clickCardAd(name);
         clickButtonDeleteAd();
     }
 
@@ -93,4 +101,6 @@ public class MainPage {
         cardAd.shouldNot(exist);
         titleAd.shouldNot(exist);
     }
+
+
 }

@@ -1,21 +1,17 @@
 package praktikum;
 
-import com.codeborne.selenide.Selenide;
 import io.cucumber.java.en.*;
 import io.qameta.allure.*;
 import praktikum.page.AdPage;
 import praktikum.page.LoginPage;
 import praktikum.page.MainPage;
 import praktikum.page.ProfilePage;
-import praktikum.api.profile.Offer;
 import praktikum.api.profile.ProfileSteps;
 import praktikum.api.user.UserSteps;
 import praktikum.utils.UserData;
 
-import java.util.List;
-
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @Feature("Создание объявления")
 public class AdSteps extends BasicLogic {
