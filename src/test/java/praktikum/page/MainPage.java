@@ -1,0 +1,106 @@
+package praktikum.page;
+
+import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.FindBy;
+
+
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.*;
+
+@Feature("Функционал главной страницы")
+public class MainPage {
+
+    @FindBy(xpath = "//div[@class='about']//h2[@class='h2']")
+    private SelenideElement titleAd;
+
+    @FindBy(xpath = "//button[text()='Вход и регистрация']")
+    private SelenideElement buttonLogin;
+
+    @FindBy(xpath = "//button[normalize-space(text())='Выйти']")
+    private SelenideElement buttonExit;
+
+    @FindBy(xpath = "//button[@class='circleSmall']")
+    private SelenideElement buttonProfile;
+
+    @FindBy(xpath = "//button[normalize-space(text())='Разместить объявление']")
+    private SelenideElement buttonAd;
+
+    @FindBy(xpath = "//input[@name='name' and @type='text']")
+    private SelenideElement inputSearch;
+
+    @FindBy(xpath = "//button[normalize-space(text())='Удалить']")
+    private SelenideElement buttonDeleteAd;
+
+    @FindBy(xpath = "//div[@class='card']")
+    private SelenideElement cardAd;
+
+    public MainPage() {
+        page(this);
+    }
+
+    @Step("Переход к форме входа и регистрации")
+    public void clickButtonLogin() {
+        buttonLogin.click();
+    }
+
+    @Step("Проверка наличия кнопки выхода из профиля")
+    public void getButtonExitVisible(String expectedText) {
+        buttonExit.shouldBe(visible).shouldHave(text(expectedText));
+    }
+
+    @Step("Проверка отображения иконки профиля")
+    public boolean isButtonProfileVisible() {
+        return buttonProfile.is(visible);
+    }
+
+    @Step("Нажатие кнопки 'Разместить объявление'")
+    public void clickButtonAd() {
+        buttonAd.click();
+    }
+
+    @Step("Кликаем по иконке профиля")
+    public void clickButtonProfile() {
+        buttonProfile.click();
+
+    }
+
+    @Step("Вводим запрос в поле поиска и нажимаем Enter")
+    public void searchAd(String name) {
+        inputSearch.setValue(name);
+        inputSearch.pressEnter();
+    }
+
+    @Step("Поиск объявления по названию")
+    public String getCardAdXpath(String name) {
+        return "//div[@class='card']//h2[contains(text(), '" + name + "')]/ancestor::div[@class='card']";
+    }
+
+    @Step("Нажимаем на объявление")
+    public void clickCardAd(String name) {
+        SelenideElement card = $(By.xpath(getCardAdXpath(name)));
+        card.shouldBe(visible).click();
+    }
+
+    @Step("Нажимаем кнопку 'Удалить' на странице объявления")
+    public void clickButtonDeleteAd() {
+        buttonDeleteAd.click();
+    }
+
+    @Step("Удаляем объявление")
+    public void deleteAd(String name) {
+        searchAd(name);
+        clickCardAd(name);
+        clickButtonDeleteAd();
+    }
+
+
+    @Step("Проверка отсутствия объявлений")
+    public void checkAdNotExists() {
+        cardAd.shouldNot(exist);
+        titleAd.shouldNot(exist);
+    }
+
+
+}
